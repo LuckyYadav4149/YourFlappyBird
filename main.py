@@ -149,22 +149,25 @@ while True:
         if event.type == pygame.QUIT:
             quit()
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                if splash_active:  # Go to menu from splash
-                    splash_active = False
-                    menu_active = True
-                elif menu_active:  # Start from menu
-                    menu_active = False
-                    game_active = True
-                    reset_game()
-                elif game_active:  # Flap
-                    bird_movement = 0
-                    bird_movement -= 6
-                    flap_sound.play()
-                else:  # Restart after game over
-                    game_active = True
-                    reset_game()
+        # ✅ Keyboard + Mouse Tap support
+        if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.KEYDOWN and event.key != pygame.K_SPACE:
+                continue  # Keyboard par sirf SPACE chalega
+
+            if splash_active:  # Go to menu from splash
+                splash_active = False
+                menu_active = True
+            elif menu_active:  # Start from menu
+                menu_active = False
+                game_active = True
+                reset_game()
+            elif game_active:  # Flap
+                bird_movement = 0
+                bird_movement -= 6
+                flap_sound.play()
+            else:  # Restart after game over
+                game_active = True
+                reset_game()
 
         if event.type == SPAWNPIPE and game_active:
             pipe_list.extend(create_pipe())
@@ -239,7 +242,7 @@ while True:
         display_score("game_over")
 
         font = pygame.font.Font("freesansbold.ttf", 28)
-        msg_surface = font.render("Press SPACE to Restart", True, WHITE)
+        msg_surface = font.render("Tap / Press SPACE to Restart", True, WHITE)
         msg_rect = msg_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
         SCREEN.blit(msg_surface, msg_rect)
 
